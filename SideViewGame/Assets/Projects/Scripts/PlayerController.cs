@@ -26,6 +26,9 @@ public class PlayerController : MonoBehaviour
 
     public int score = 0; //ゲームスコア
 
+    // タッチスクリーン対応追加
+    bool isMoving = false;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -45,8 +48,13 @@ public class PlayerController : MonoBehaviour
             return;
         }
 
-        //水平方向の入力をチェックする
-        axisH = Input.GetAxisRaw("Horizontal");
+        //移動
+        if (isMoving == false)
+        {
+            //水平方向の入力をチェックする
+            axisH = Input.GetAxisRaw("Horizontal");
+        }
+
         //向きの調整
         if (axisH > 0.0f)
         {
@@ -169,12 +177,27 @@ public class PlayerController : MonoBehaviour
         rbody.AddForce(new Vector2(0, 5), ForceMode2D.Impulse);
     }
 
+    //ゲーム停止
     void GameStop()
     {
         //Rigidbody2Dをとってくる
         Rigidbody2D rbody = this.GetComponent<Rigidbody2D>();
         //速度を0にして強制停止
         rbody.velocity = new Vector2(0, 0);
+    }
+
+    // タッチスクリーン対応追加
+    public void SetAxis(float h, float v)
+    {
+        axisH = h;
+        if (axisH == 0)
+        {
+            isMoving = false;
+        }
+        else
+        {
+            isMoving = true;
+        }
     }
 }
 
